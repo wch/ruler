@@ -11,6 +11,8 @@ Parametric 3D-printable ruler design in OpenSCAD.
 |------|---------|
 | `ruler_parametric_lib.scad` | Ruler library — all modules (body, ticks, numbers, hole, top-level `ruler()`) |
 | `ruler_parametric.scad` | Ruler entry point; sets parameters and calls `ruler()` |
+| `ruler_parametric_variants.scad` | Multi-variant entry point; defines a `variants` array (unit/length/thickness/label) and renders one via `-D variant=N` (or a grid preview when `variant=-1`) |
+| `export_variants.sh` | Loops every variant × `{base, body, numbers}` and writes 24 STLs to `out/` |
 
 ## Commands
 
@@ -31,6 +33,17 @@ Then read the png file to see what it looks like.
 ```
 openscad file.scad -o out/file.stl
 ```
+
+**Batch-export all variants as three-part STLs:**
+
+```
+./export_variants.sh
+```
+
+Writes `stl/ruler_<label>_<part>.stl` for every variant × `{base, body, numbers}`.
+Set `OPENSCAD=/path/to/openscad` if the default Mac path is wrong.
+The `LABELS` array in the script must stay in sync with the `variants` array in
+`ruler_parametric_variants.scad` — same order, same count.
 
 ## Architecture
 
