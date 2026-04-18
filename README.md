@@ -65,7 +65,7 @@ Editing variants: change the `variants` array in `ruler_parametric_variants.scad
 
 To preview all variants in the OpenSCAD GUI before exporting, just open `ruler_parametric_variants.scad`; with `variant = -1` (the default) it lays out every variant in a grid.
 
-## Multi-color printing
+## Importing into the slicer
 
 The ruler is designed for three-color printing with four render modes:
 
@@ -74,14 +74,34 @@ The ruler is designed for three-color printing with four render modes:
 - `body` — body above `tick_floor`, with tick grooves, number cutouts (when engraved), and the hanging hole. This is the main ruler color.
 - `numbers` — the number geometry only (with small corner anchor cubes so the slicer can align it with the body).
 
-Workflow:
+Import workflow:
 
-1. Run `./export_variants.sh` (or the three single-file commands above).
-2. In your slicer, import `ruler_<size>_base.stl`, `ruler_<size>_body.stl`, and
-   `ruler_<size>_numbers.stl` as separate objects for the same plate.
-3. Align them to the same origin (most slicers have a "merge" or "load at
-   original position" option).
-4. Assign a different filament to each object.
+1. Run `./export_variants.sh` (or the three single-file commands above). For each ruler size, there will be three .stl files:
+   - `ruler_<size>_numbers.stl`
+   - `ruler_<size>_base.stl`
+   - `ruler_<size>_body.stl`
+
+2. In your slicer, import the three files for a given ruler size. (You can use the import dialog or just select the three files in the file manager and drag them to the slicer window.)
+   - You can select the three files in the file manager and drag them to the slicer window. Or if you use the import dialog, select the three parts and import them together.
+   - It may say that the numbers part is too small and ask to scale to millimeters. Click on **No**.
+   - It will ask, "Load these files as a single object with multiple parts?". Click on **Yes**.
+
+3. At this point, the ruler will be in the slicer. Now you need to set the colors for the base and the numbers.
+   - In the sidebar, there is a Process panel. Click on Objects.
+   - Find the ruler object and click on the arrow to the left of it to expand it to show components.
+   - Select the `ruler_<size>_base.stl` component. Then click on the numbered rectangle. It will show your filament options.
+   - Select which filament you want to use for the base.
+   - Do the same for the `ruler_<size>_numbers.stl` and `ruler_<size>_body.stl`.
+
+### Slicer settings
+
+After you've imported the ruler, you need to configure your slicer settings.
+
+- Use a 0.08mm layer preset
+- In the **Wall generator** section, switch from Classic to **Arachne**.
+
+I found that under **Speed**, setting the **Top surface** speed to a lower value helps with surface quality. I set it to 30 mm/s (down from the default of 150 mm/s).
+
 
 ## Tuning
 
